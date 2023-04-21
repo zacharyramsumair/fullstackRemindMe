@@ -1,94 +1,133 @@
+const Reminder = require("../models/reminderModel");
+const User = require("../models/userModel");
 
-const Reminder = require('../models/reminderModel')
-const User = require('../models/userModel')
-
-// @desc    Get reminder
-// @route   GET /api/reminder
+// @desc    Get reminders
+// @route   GET /api/reminders
 // @access  Private
 const getReminders = async (req, res) => {
-  const reminders = await Reminder.find({ user: req.user.id })
+	const reminders = await Reminder.find({ user: req.user.id });
+	res.status(200).json({
+		count: reminders.length,
+		reminders,
+	});
+};
 
-  res.status(200).json(goals)
-}
+// @desc    Get reminder
+// @route   GET /api/reminders/:id
+// @access  Private
+const getReminder = async (req, res) => {
+	const reminder = await Reminder.findById(req.params.id);
+	if (!reminder) {
+		return res.status(404).json({ message: "Reminder not found" });
+	}
+	res.json(reminder);
+};
 
-// @desc    Set reminder
+// @desc    Create reminder
 // @route   POST /api/reminders
 // @access  Private
-const setReminder = async (req, res) => {
-  if (!req.body.text) {
-    res.status(400)
-    throw new Error('Please add a text field')
-  }
+const createReminder = async (req, res) => {
+	if (!req.body.text) {
+		res.status(400);
+		throw new Error("Please add a Reminder");
+	}
 
-  const reminder = await Reminder.create({
-    // text: req.body.text,
-    // user: req.user.id,
-  })
+	if (!req.body.dueDate) {
+		res.status(400);
+		throw new Error("Please add a due Date");
+	}
 
-  res.status(200).json(reminder)
-}
+	const reminder = await Reminder.create({
+		text: req.body.text,
+		dueDate: req.body.dueDate,
+		isCompleted: false,
+		user: req.user.id,
+	});
+
+	res.status(201).json(reminder);
+};
 
 // @desc    Update reminder
 // @route   PUT /api/reminders/:id
 // @access  Private
 const updateReminder = async (req, res) => {
-  const reminder = await Reminder.findById(req.params.id)
+	const reminder = await Reminder.findById(req.params.id);
 
-  if (!reminder) {
-    res.status(400)
-    throw new Error('Reminder not found')
-  }
+	if (!reminder) {
+		res.status(404);
+		throw new Error("Reminder not found");
+	}
 
-  // Check for user
-  if (!req.user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
+	// Check for user
+	if (!req.user) {
+		res.status(401);
+		throw new Error("User not found");
+	}
 
-  // Make sure the logged in user matches the reminder user
-  if (reminder.user.toString() !== req.user.id) {
-    res.status(401)
-    throw new Error('User not authorized')
-  }
+	// Make sure the logged in user matches the reminder user
+	if (reminder.user.toString() !== req.user.id) {
+		res.status(401);
+		throw new Error("User not authorized");
+	}
 
-  const updatedReminder = await Reminder.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  })
+	if (!req.body.text) {
+		res.status(400);
+		throw new Error("Please add a Reminder");
+	}
 
-  res.status(200).json(updatedReminder)
-}
+	if (!req.body.dueDate) {
+		res.status(400);
+		throw new Error("Please add a due Date");
+	}
+
+	if (reminder.user.toString() !== req.user.id) {
+		res.status(401);
+		throw new Error("User not authorized");
+	}
+
+	const updatedReminder = await Reminder.findByIdAndUpdate(
+		req.params.id,
+		req.body,
+		{
+			new: true,
+		}
+	);
+
+	res.status(200).json(updatedReminder);
+};
 
 // @desc    Delete reminder
 // @route   DELETE /api/reminders/:id
 // @access  Private
 const deleteReminder = async (req, res) => {
-  const reminder = await Reminder.findById(req.params.id)
+	const reminder = await Reminder.findById(req.params.id);
 
-  if (!reminder) {
-    res.status(400)
-    throw new Error('Reminder not found')
-  }
+	if (!reminder) {
+		res.status(404);
+		throw new Error("Reminder not found");
+	}
 
-  // Check for user
-  if (!req.user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
+	// Check for user
+	if (!req.user) {
+		res.status(401);
+		throw new Error("User not found");
+	}
 
-  // Make sure the logged in user matches the reminder user
-  if (reminder.user.toString() !== req.user.id) {
-    res.status(401)
-    throw new Error('User not authorized')
-  }
+	// Make sure the logged in user matches the reminder user
+	if (reminder.user.toString() !== req.user.id) {
+		res.status(401);
+		throw new Error("User not authorized");
+	}
 
-  await reminder.remove()
+	await Reminder.findByIdAndRemove(req.params.id);
 
-  res.status(200).json({ id: req.params.id })
-}
+	res.status(200).json({ id: req.params.id });
+};
 
 module.exports = {
-  getReminders,
-  setReminder,
-  updateReminder,
-  deleteReminder,
-}
+	getReminders,
+	getReminder,
+	createReminder,
+	updateReminder,
+	deleteReminder,
+};
