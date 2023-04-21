@@ -5,7 +5,26 @@ const User = require("../models/userModel");
 // @route   GET /api/reminders
 // @access  Private
 const getReminders = async (req, res) => {
-	const reminders = await Reminder.find({ user: req.user.id });
+	//add sort by oldest, last updated(default), incomplete only, complete only
+
+	let { sort, completionState } = req.query;
+    let sortQuery = {updatedAt:"desc"};
+    let completionFilter = { user: req.user.id }
+
+    if(sort == "oldest"){
+       sortQuery ={ createdAt: 'asc' }
+    }
+
+    if(completionState == "complete"){
+        completionFilter = { user: req.user.id , isCompleted:true}
+    }
+    if(completionState == "incomplete"){
+        completionFilter = { user: req.user.id , isCompleted:false}
+    }
+
+	const reminders = await Reminder.find(completionFilter).sort(sortQuery);
+   
+
 	res.status(200).json({
 		count: reminders.length,
 		reminders,
