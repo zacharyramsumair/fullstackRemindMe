@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as z from 'zod';
+import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUser } from "react-icons/fa";
 import { useRegisterUserMutation } from "../features/api/apiSlice";
 import { ZodType } from "zod";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { loginUser } from "../features/auth/authSlice";
+import { errorToast } from "../components/toastFunctions";
 
 type Props = {};
 
 const Register = (props: Props) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	// useEffect(() => {
 	// 	if (loggedIn) {
@@ -18,7 +23,7 @@ const Register = (props: Props) => {
 	// 	}
 	// }, [loggedIn]);
 
-  const [registerUser] = useRegisterUserMutation()
+	const [registerUser] = useRegisterUserMutation();
 
 	type IFormData = {
 		name: string;
@@ -27,14 +32,18 @@ const Register = (props: Props) => {
 		confirmPassword: string;
 	};
 
-  let initialValue: IFormData = localStorage.getItem("registerFormData")
-  ? JSON.parse(localStorage.getItem("registerFormData")!)
-  : {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
+	const blankRegisterForm:IFormData = {
+		name: "",
+		email: "",
+		password: "",
+		confirmPassword: "",
+  }
+	let initialValue: IFormData = localStorage.getItem("registerFormData")
+		? JSON.parse(localStorage.getItem("registerFormData")!)
+		: blankRegisterForm;
+
+	const currentUser = useSelector((state: RootState) => state.auth);
+	console.log("user", currentUser);
 
 	console.log("s", initialValue);
 
@@ -42,6 +51,12 @@ const Register = (props: Props) => {
 
 	useEffect(() => {
 		localStorage.setItem("registerFormData", JSON.stringify(formData));
+
+		if (currentUser) {
+			console.log
+			navigate("/");
+		}
+
 	}, [formData]);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,14 +122,24 @@ const Register = (props: Props) => {
 		// 	setLoggedIn(true);
 		// }
 		// setFormData(data)
-       registerUser(data).then(
-        res => console.log(res)
-       ).catch(err =>
-        console.log(err)
-       )
-      // console.log("response" , response)
-		// console.log(data);
-		console.log("coming throught");
+		registerUser(data)
+			.then((res) => {
+				if ("error" in res) {
+					return errorToast(res.error.data.message);
+				}
+
+				console.log("response", res);
+				setFormData(blankRegisterForm)
+				localStorage.setItem("registerFormData", JSON.stringify(blankRegisterForm));
+
+				localStorage.setItem("user", JSON.stringify(res));
+				dispatch(loginUser(res.data));
+				navigate("/");
+			})
+			.catch((err) => {
+				console.log(err);
+				errorToast(err.message);
+			});
 	};
 
 	return (
