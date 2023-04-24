@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { ZodType } from "zod/lib";
+import * as z from 'zod';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUser } from "react-icons/fa";
 import { useRegisterUserMutation } from "../features/api/apiSlice";
+import { ZodType } from "zod";
 
 type Props = {};
 
@@ -27,14 +27,14 @@ const Register = (props: Props) => {
 		confirmPassword: string;
 	};
 
-	let initialValue: IFormData = JSON.parse(
-		localStorage.getItem("registerFormData")
-	) || {
-		name: "",
-		email: "",
-		password: "",
-		confirmPassword: "",
-	};
+  let initialValue: IFormData = localStorage.getItem("registerFormData")
+  ? JSON.parse(localStorage.getItem("registerFormData")!)
+  : {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
 
 	console.log("s", initialValue);
 
