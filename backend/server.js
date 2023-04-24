@@ -5,6 +5,8 @@ const path = require('path');
 // extra security packages
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const cors = require('cors')
+
 
 const express = require('express');
 const { errorHandler } = require('./middleware/errorMiddleware');
@@ -17,8 +19,13 @@ connectDB();
 
 const app = express();
 
+app.use(cors())
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
+
 
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/users', userRoutes);
