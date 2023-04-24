@@ -7,6 +7,7 @@ import Register from "./pages/Register"
 import Header from "./components/Header"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReminderDashboard from "./pages/ReminderDashboard"
 
 function App() {
   
@@ -20,7 +21,7 @@ function App() {
           <Header />
 
           <Routes>
-            <Route path='/' element={<SingleReminder />} />
+            <Route path='/' element={<ReminderDashboard />} />
             <Route path='/reminder/:id' element={<SingleReminder />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

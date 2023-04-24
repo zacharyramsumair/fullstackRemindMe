@@ -52,7 +52,7 @@ const Register = (props: Props) => {
 		localStorage.setItem("registerFormData", JSON.stringify(formData));
 
 		if (isSuccess) {
-			successToast(`Welcome ${registeredUser.name} `);
+			successToast(`Welcome ${registeredUser.name}! `);
 			setFormData(blankRegisterForm);
 			localStorage.setItem(
 				"registerFormData",
@@ -67,7 +67,6 @@ const Register = (props: Props) => {
 	}, [formData,isSuccess]);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log("changed");
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
@@ -238,6 +237,4 @@ const Register = (props: Props) => {
 };
 
 export default Register;
-function dispatch(arg0: any) {
-	throw new Error("Function not implemented.");
-}
+
