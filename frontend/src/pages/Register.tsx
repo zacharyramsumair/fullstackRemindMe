@@ -107,7 +107,12 @@ const Register = (props: Props) => {
 		// 	setLoggedIn(true);
 		// }
 		// setFormData(data)
-      registerUser(data)
+       registerUser(data).then(
+        res => console.log(res)
+       ).catch(err =>
+        console.log(err)
+       )
+      // console.log("response" , response)
 		// console.log(data);
 		console.log("coming throught");
 	};
