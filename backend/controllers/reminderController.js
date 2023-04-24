@@ -89,15 +89,15 @@ const updateReminder = async (req, res) => {
 		throw new Error("User not authorized");
 	}
 
-	if (!req.body.text) {
-		res.status(400);
-		throw new Error("Please add a Reminder");
-	}
+	// if (!req.body.text) {
+	// 	res.status(400);
+	// 	throw new Error("Please add a Reminder");
+	// }
 
-	if (!req.body.dueDate) {
-		res.status(400);
-		throw new Error("Please add a due Date");
-	}
+	// if (!req.body.dueDate) {
+	// 	res.status(400);
+	// 	throw new Error("Please add a due Date");
+	// }
 
 	if (reminder.user.toString() !== req.user.id) {
 		res.status(401);

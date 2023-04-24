@@ -4,26 +4,30 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUser } from "react-icons/fa";
-import { useRegisterUserMutation } from "../features/api/apiSlice";
 import { ZodType } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../app/store";
-import { loginUser } from "../features/auth/authSlice";
 import { errorToast } from "../components/toastFunctions";
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 type Props = {};
 
+const postRequest = async (data) => {
+	// const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
+	// const headers = { Authorization: token };
+	const response = await axios.post(`${import.meta.env.VITE_BASEURL}/users`, data,);
+	// const response = await axios.post('https://api.example.com/endpoint', data, { headers });
+	return response.data;
+  };
+
 const Register = (props: Props) => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const { mutate, isLoading, isError, isSuccess, data, error } = useMutation(postRequest);
 
-	// useEffect(() => {
-	// 	if (loggedIn) {
-	// 		navigate("/");
-	// 	}
-	// }, [loggedIn]);
+	
 
-	const [registerUser] = useRegisterUserMutation();
+
+
 
 	type IFormData = {
 		name: string;
@@ -42,8 +46,6 @@ const Register = (props: Props) => {
 		? JSON.parse(localStorage.getItem("registerFormData")!)
 		: blankRegisterForm;
 
-	const currentUser = useSelector((state: RootState) => state.auth);
-	console.log("user", currentUser);
 
 	console.log("s", initialValue);
 
@@ -52,7 +54,7 @@ const Register = (props: Props) => {
 	useEffect(() => {
 		localStorage.setItem("registerFormData", JSON.stringify(formData));
 
-		if (currentUser) {
+		if (5 > 10) {
 			console.log
 			navigate("/");
 		}
@@ -118,28 +120,27 @@ const Register = (props: Props) => {
 	});
 
 	const submitData = (data: IFormData) => {
-		// if (setLoggedIn) {
-		// 	setLoggedIn(true);
-		// }
-		// setFormData(data)
-		registerUser(data)
-			.then((res) => {
-				if ("error" in res) {
-					return errorToast(res.error.data.message);
-				}
+		console.log("submitted" , data)
+		mutate(formData);
+	
+		// registerUser(data)
+		// 	.then((res) => {
+		// 		if ("error" in res) {
+		// 			return errorToast(res.error.data.message);
+		// 		}
 
-				console.log("response", res);
-				setFormData(blankRegisterForm)
-				localStorage.setItem("registerFormData", JSON.stringify(blankRegisterForm));
+		// 		console.log("response", res);
+		// 		setFormData(blankRegisterForm)
+		// 		localStorage.setItem("registerFormData", JSON.stringify(blankRegisterForm));
 
-				localStorage.setItem("user", JSON.stringify(res));
-				dispatch(loginUser(res.data));
-				navigate("/");
-			})
-			.catch((err) => {
-				console.log(err);
-				errorToast(err.message);
-			});
+		// 		localStorage.setItem("user", JSON.stringify(res));
+		// 		dispatch(loginUser(res.data));
+		// 		navigate("/");
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 		errorToast(err.message);
+		// 	});
 	};
 
 	return (

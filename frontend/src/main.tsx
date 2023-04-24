@@ -1,22 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import {  apiSlice } from "./features/api/apiSlice";
-import { Provider } from 'react-redux';
-import { store } from './app/store.ts';
+import { store } from './app/store'
+import { Provider } from 'react-redux'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
-// store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
-store.dispatch(apiSlice.endpoints.registerUser.initiate());
+const queryClient = new QueryClient();
+
+// console.log(import.meta.env.VITE_SOME_KEY) // 123
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-     {/* <ApiProvider api={apiSlice}> */}
+    <QueryClientProvider client={queryClient}>
     <App />
-    {/* </ApiProvider> */}
+    </QueryClientProvider>
     </Provider>
+
   </React.StrictMode>,
 )
