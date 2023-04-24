@@ -6,28 +6,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaUser } from "react-icons/fa";
 import { ZodType } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { errorToast } from "../components/toastFunctions";
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import { errorToast, successToast } from "../components/toastFunctions";
+import { useRegisterUser } from "../hooks/useRegisterUser";
+import { loginUser } from "../features/auth/authSlice";
 
 type Props = {};
 
-const postRequest = async (data) => {
-	// const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
-	// const headers = { Authorization: token };
-	const response = await axios.post(`${import.meta.env.VITE_BASEURL}/users`, data,);
-	// const response = await axios.post('https://api.example.com/endpoint', data, { headers });
-	return response.data;
-  };
-
 const Register = (props: Props) => {
 	const navigate = useNavigate();
-	const { mutate, isLoading, isError, isSuccess, data, error } = useMutation(postRequest);
+	const dispatch = useDispatch();
+	// const { mutate, isLoading, isError, isSuccess, data, error } = useMutation(postRequest);
+
+	let {
+		registerUser,
+		error,
+		data: registeredUser,
+		isError,
+		isLoading,
+		isSuccess,
+	} = useRegisterUser();
 
 	
-
-
-
 
 	type IFormData = {
 		name: string;
@@ -36,30 +35,36 @@ const Register = (props: Props) => {
 		confirmPassword: string;
 	};
 
-	const blankRegisterForm:IFormData = {
+	const blankRegisterForm: IFormData = {
 		name: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
-  }
+	};
 	let initialValue: IFormData = localStorage.getItem("registerFormData")
 		? JSON.parse(localStorage.getItem("registerFormData")!)
 		: blankRegisterForm;
 
-
-	console.log("s", initialValue);
 
 	let [formData, setFormData] = useState<IFormData>(initialValue);
 
 	useEffect(() => {
 		localStorage.setItem("registerFormData", JSON.stringify(formData));
 
-		if (5 > 10) {
-			console.log
+		if (isSuccess) {
+			successToast(`Welcome ${registeredUser.name} `);
+			setFormData(blankRegisterForm);
+			localStorage.setItem(
+				"registerFormData",
+				JSON.stringify(blankRegisterForm)
+			);
+
+			//put in the return data from the post
+			localStorage.setItem("user", JSON.stringify(registeredUser));
+			dispatch(loginUser(registeredUser));
 			navigate("/");
 		}
-
-	}, [formData]);
+	}, [formData,isSuccess]);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		console.log("changed");
@@ -120,27 +125,25 @@ const Register = (props: Props) => {
 	});
 
 	const submitData = (data: IFormData) => {
-		console.log("submitted" , data)
-		mutate(formData);
-	
-		// registerUser(data)
-		// 	.then((res) => {
-		// 		if ("error" in res) {
-		// 			return errorToast(res.error.data.message);
-		// 		}
+		registerUser(data);
 
-		// 		console.log("response", res);
-		// 		setFormData(blankRegisterForm)
-		// 		localStorage.setItem("registerFormData", JSON.stringify(blankRegisterForm));
+		if (isError) {
+			errorToast(error.response.data.message as string);
+		}
 
-		// 		localStorage.setItem("user", JSON.stringify(res));
-		// 		dispatch(loginUser(res.data));
-		// 		navigate("/");
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 		errorToast(err.message);
-		// 	});
+		// if (isSuccess) {
+		// 	successToast(`Welcome ${registeredUser.name} `);
+		// 	setFormData(blankRegisterForm);
+		// 	localStorage.setItem(
+		// 		"registerFormData",
+		// 		JSON.stringify(blankRegisterForm)
+		// 	);
+
+		// 	//put in the return data from the post
+		// 	localStorage.setItem("user", JSON.stringify(registeredUser));
+		// 	dispatch(loginUser(registeredUser));
+		// 	navigate("/");
+		// }
 	};
 
 	return (
@@ -235,3 +238,6 @@ const Register = (props: Props) => {
 };
 
 export default Register;
+function dispatch(arg0: any) {
+	throw new Error("Function not implemented.");
+}
