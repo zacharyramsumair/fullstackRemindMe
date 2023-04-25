@@ -26,8 +26,6 @@ const Register = (props: Props) => {
 		isSuccess,
 	} = useRegisterUser();
 
-	
-
 	type IFormData = {
 		name: string;
 		email: string;
@@ -44,7 +42,6 @@ const Register = (props: Props) => {
 	let initialValue: IFormData = localStorage.getItem("registerFormData")
 		? JSON.parse(localStorage.getItem("registerFormData")!)
 		: blankRegisterForm;
-
 
 	let [formData, setFormData] = useState<IFormData>(initialValue);
 
@@ -64,7 +61,7 @@ const Register = (props: Props) => {
 			dispatch(loginUser(registeredUser));
 			navigate("/");
 		}
-	}, [formData,isSuccess]);
+	}, [formData, isSuccess]);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData((prevState) => ({
@@ -237,4 +234,3 @@ const Register = (props: Props) => {
 };
 
 export default Register;
-

@@ -1,10 +1,13 @@
+import CreateReminderForm from "../components/createReminderForm";
 
-type Props = {}
+type Props = {};
 
 const Dashboard = (props: Props) => {
-  return (
-    <div>Dashboard</div>
-  )
-}
+	return (
+		<section>
+      <CreateReminderForm/>
+		</section>
+	);
+};
 
-export default Dashboard
+export default Dashboard;

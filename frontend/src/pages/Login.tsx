@@ -15,7 +15,6 @@ type Props = {};
 const Login = (props: Props) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	// const { mutate, isLoading, isError, isSuccess, data, error } = useMutation(postRequest);
 
 	let {
 		loginAccount,
