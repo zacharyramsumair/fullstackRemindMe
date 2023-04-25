@@ -104,6 +104,7 @@ console.log(formData)
 
   return (
     <section className='form'>
+      <h2>Add a Reminder</h2>
       
     <form onSubmit={handleSubmit(submitData)}>
       <div className='form-group'>
