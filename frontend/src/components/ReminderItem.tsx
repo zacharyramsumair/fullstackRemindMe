@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useDeleteReminder } from "../hooks/useDeleteReminder";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import { useUpdateReminder } from "../hooks/useUpdateReminder";
 
 type Props = {};
 
@@ -26,18 +27,25 @@ const ReminderItem = (props: IReminderItem) => {
     let navigate = useNavigate()
     const token = useSelector((state: RootState) => state.auth.user.token)
 
+	let {updateReminder, isSuccess:SuccessfulUpdate}= useUpdateReminder()
+
+
 
     let {deleteReminder} = useDeleteReminder()
 
 	const options:IOptions = { day: "numeric", month: "long", year: "numeric" };
 	const formattedDateString = date.toLocaleDateString("en-US", options);
 
-    let [com, setCom] = useState(false)
 
     const handleDoubleClick = () => {
 		console.log("Reminder double-clicked!");
-        setCom(prev => !prev)
-		// Call your function here
+		updateReminder({id:props.id, token, reminderInfo: {
+			data: {
+				reminder:props.text,
+				dueDate:props.dueDate,
+				isCompleted:!props.isCompleted
+			}
+		} })
 	};
 
 
@@ -45,11 +53,10 @@ const ReminderItem = (props: IReminderItem) => {
     
 
 	return (
-		<div className="reminder" onDoubleClick={handleDoubleClick} style={{ opacity: com ? 0.7 : 1 }} >
-			<h2 style={{ textDecoration: com ? "line-through" : "none" }}>{props.text}</h2>
+		<div className="reminder" onDoubleClick={handleDoubleClick} style={{ opacity: props.isCompleted ? 0.7 : 1 }} >
+			<h2 style={{ textDecoration: props.isCompleted ? "line-through" : "none" }}>{props.text}</h2>
 			<p>Due Date: {formattedDateString}</p>
 			<button className="edit" onClick={() => navigate(`reminders/${props.id}`)}>
-				{/* <button onClick={() => dispatch(deleteGoal(goal._id))} className='close'> */}
 				<FaEdit />
 			</button>
 			<button className="delete" 

@@ -5,19 +5,9 @@ import { RootState } from "../app/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const postRequest = async (data) => {
-	// const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
-	// const headers = { Authorization: token };
-	const response = await axios.post(
-		`${import.meta.env.VITE_BASEURL}/users/login`,
-		data
-	);
-	// const response = await axios.post(import { useDispatch } from 'react-redux';
-	//  'https://api.example.com/endpoint', data, { headers });
-	return response.data;
-};
 
-export const useGetAllReminders = (sort: string) => {
+
+export const useGetOneReminder = (id: string) => {
 
 	const user = useSelector((state: RootState) => state.auth.user)
 	let navigate = useNavigate()
@@ -29,26 +19,12 @@ export const useGetAllReminders = (sort: string) => {
 
 
 	// 'oldest', 'lastUpdated', 'complete', 'incomplete'])
-	let apiString = `${import.meta.env.VITE_BASEURL}/reminders`;
-	if (sort == "lastUpdated") {
-		// remains the same
-		apiString = `${import.meta.env.VITE_BASEURL}/reminders`;
-	} else if (sort == "oldest") {
-		apiString = `${import.meta.env.VITE_BASEURL}/reminders?sort=oldest`;
-	}
-    else if (sort == "dueDate") {
-		apiString = `${import.meta.env.VITE_BASEURL}/reminders?sort=dueDate`;
-	}
-
-    else if (sort == "complete") {
-		apiString = `${import.meta.env.VITE_BASEURL}/reminders?completionState=complete`;
-	} else if (sort == "incomplete") {
-		apiString = `${import.meta.env.VITE_BASEURL}/reminders?completionState=incomplete`;
-	}
+	let apiString = `${import.meta.env.VITE_BASEURL}/reminders/${id}`;
+	
 	const token = useSelector((state: RootState) => state.auth.user.token);
 
 	const headers = { Authorization: `Bearer ${token}` };
-	const { isLoading, error, data, refetch } = useQuery(
+	const { isLoading:LoadingOneReminder, error:ErrorOneReminder, data:OneReminderData, refetch } = useQuery(
 		["allReminders"],
 		() => axios(apiString, { headers }),
 		{
@@ -56,7 +32,7 @@ export const useGetAllReminders = (sort: string) => {
 		}
 	);
 
-	return { isLoading, error, data, refetch };
+	return { LoadingOneReminder, ErrorOneReminder, OneReminderData, refetch };
 };
 
 // import { useQuery } from '@tanstack/react-query';

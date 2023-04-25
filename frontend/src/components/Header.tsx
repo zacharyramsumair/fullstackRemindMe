@@ -3,33 +3,37 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../app/store'
 import { logout } from '../features/auth/authSlice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { logoutToast } from './toastFunctions'
+import { useGetAllReminders } from '../hooks/useGetAllReminders'
 // import { logout, reset } from '../features/auth/authSlice'
 
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
+  let [sortOption, setSortOption] = useState<string>("lastUpdated")
 
   useEffect(()=>{
-    if(!user){
+    if(!user || user == null){
       navigate("/login")
     }
   }, [user])
 
 
-  const onLogout = () => {
-    dispatch(logout())
-    logoutToast(`👋 See you later`)
 
-    // navigate('/login')
+
+  const onLogout = () => {
+    navigate('/login')
+    logoutToast(`👋 See you later`)
+    dispatch(logout())
+
   }
 
   return (
     <header className='header'>
       <div className='logo'>
-        <Link to='/'>Remind Me</Link>
+        <Link to='/' >Remind Me</Link>
       </div>
       <ul>
         {user ? (

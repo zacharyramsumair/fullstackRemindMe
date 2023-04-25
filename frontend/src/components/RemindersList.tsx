@@ -30,7 +30,7 @@ refetch()
       let reminderElements;
 
 
-      if(reminders){
+      if(reminders?.data?.reminders){
 
         reminderElements = reminders.data.reminders.map((reminder:IReminderItem) => (
             <ReminderItem key={reminder._id} id={reminder._id}  text={reminder.text} dueDate={reminder.dueDate} isCompleted={reminder.isCompleted}  />

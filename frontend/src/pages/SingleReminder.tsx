@@ -1,10 +1,11 @@
 import React from 'react'
+import EditReminderForm from '../components/EditReminderForm'
 
 type Props = {}
 
 const SingleReminder = (props: Props) => {
   return (
-    <div>SingleReminder</div>
+    <EditReminderForm/>
   )
 }
 

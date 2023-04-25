@@ -31,7 +31,27 @@ export type IAddReminderFormData = {
 const CreateReminderForm = (props: Props) => {
 
   const navigate = useNavigate();
-  const token = useSelector((state: RootState) => state.auth.user.token)
+
+  let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
+  const user = useSelector((state: RootState) => state.auth.user)
+
+
+
+  useEffect(() => {
+		if (isSuccess) {
+			successToast(`Reminder Added!`);
+			//put in the return data from the post
+			// dispatch(loginUser({...newReminder,}));
+      setFormData(blankAddReminderForm)
+			navigate("/");
+
+
+		}
+
+    if(!user || user == null){
+      navigate("/login")
+    }
+	}, [isSuccess , user]);
 
 let blankAddReminderForm:IAddReminderFormData = {
   reminder:"",
@@ -39,6 +59,8 @@ let blankAddReminderForm:IAddReminderFormData = {
 }
 
   let [formData,setFormData] =useState<IAddReminderFormData>(blankAddReminderForm)
+  const token = useSelector((state: RootState) => state.auth.user.token)
+
 
   // let {
 	// 	loginAccount,
@@ -49,19 +71,7 @@ let blankAddReminderForm:IAddReminderFormData = {
 	// 	isSuccess,
 	// } = useLoginUser();
 
-  let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
-
-console.log(formData)
-
-  useEffect(() => {
-		if (isSuccess) {
-			successToast(`Reminder Added!`);
-			//put in the return data from the post
-			// dispatch(loginUser({...newReminder,}));
-      setFormData(blankAddReminderForm)
-			navigate("/");
-		}
-	}, [isSuccess]);
+  
 
   let date = new Date()
 
