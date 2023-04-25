@@ -1,31 +1,47 @@
-import React from 'react'
+import React, { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-type Props = {}
+type Props = {};
 
-
-interface IReminderItem{
-    key:string,
-    id:string,
-    text:string,
-    dueDate:Date,
-    isCompleted:boolean
+interface IReminderItem {
+	key: string;
+	id: string;
+	text: string;
+	dueDate: Date;
+	isCompleted: boolean;
 }
 
 const ReminderItem = (props: IReminderItem) => {
+	const date = new Date(props.dueDate);
 
-    const date = new Date(props.dueDate);
+	const options = { day: "numeric", month: "long", year: "numeric" };
+	const formattedDateString = date.toLocaleDateString("en-US", options);
 
-const options = { day: "numeric", month: "long", year: "numeric" };
-const formattedDateString = date.toLocaleDateString("en-US", options);
-  return (
-<div className='reminder'>
-      <h2>{props.text}</h2>
-      <p>Due Date: {formattedDateString}</p>
-      <button className='close'>
-      {/* <button onClick={() => dispatch(deleteGoal(goal._id))} className='close'> */}
-        X
-      </button>
-    </div>  )
-}
+    let [com, setCom] = useState(false)
 
-export default ReminderItem
+    const handleDoubleClick = () => {
+		console.log("Reminder double-clicked!");
+        setCom(prev => !prev)
+		// Call your function here
+	};
+
+
+    
+    
+
+	return (
+		<div className="reminder" onDoubleClick={handleDoubleClick} style={{ opacity: com ? 0.7 : 1 }} >
+			<h2 style={{ textDecoration: com ? "line-through" : "none" }}>{props.text}</h2>
+			<p>Due Date: {formattedDateString}</p>
+			<button className="edit">
+				{/* <button onClick={() => dispatch(deleteGoal(goal._id))} className='close'> */}
+				<FaEdit />
+			</button>
+			<button className="delete">
+				<FaTrash />
+			</button>
+		</div>
+	);
+};
+
+export default ReminderItem;

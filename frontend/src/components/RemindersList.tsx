@@ -37,6 +37,7 @@ const RemindersList = (props: Props) => {
 
   return (
     <>
+    <p>Double Click to change the completion status</p>
     {reminderElements}
     </>
   )
