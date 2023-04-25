@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
+import { queryClient } from '../main';
 
 
 interface IaddReminder {
@@ -25,6 +26,8 @@ const postRequest = async (data: {
 
 export const useAddReminder = () => {
 
-    const { mutate: addReminder, isLoading, isError, isSuccess, data, error } = useMutation(postRequest);
+    const { mutate: addReminder, isLoading, isError, isSuccess, data, error } = useMutation(postRequest, {
+        onSuccess: () => queryClient.invalidateQueries(["allReminders"])
+    });
     return { addReminder, error, data, isError, isLoading, isSuccess }
 }

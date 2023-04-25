@@ -22,7 +22,7 @@ function App() {
 
           <Routes>
             <Route path='/' element={<ReminderDashboard />} />
-            <Route path='/reminder/:id' element={<SingleReminder />} />
+            <Route path='/reminders/:id' element={<SingleReminder />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
           </Routes>

@@ -33,11 +33,12 @@ const CreateReminderForm = (props: Props) => {
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.user.token)
 
+let blankAddReminderForm:IAddReminderFormData = {
+  reminder:"",
+  dueDate: new Date()
+}
 
-  let [formData,setFormData] =useState<IAddReminderFormData>({
-    reminder:"",
-    dueDate: new Date()
-  })
+  let [formData,setFormData] =useState<IAddReminderFormData>(blankAddReminderForm)
 
   // let {
 	// 	loginAccount,
@@ -48,15 +49,16 @@ const CreateReminderForm = (props: Props) => {
 	// 	isSuccess,
 	// } = useLoginUser();
 
-  let {addReminder, error, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
+  let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
 
-console.log(formData)
+// console.log(formData)
 
   useEffect(() => {
 		if (isSuccess) {
 			successToast(`Reminder Added!`);
 			//put in the return data from the post
 			// dispatch(loginUser({...newReminder,}));
+      setFormData(blankAddReminderForm)
 			navigate("/");
 		}
 	}, [isSuccess]);
@@ -64,7 +66,7 @@ console.log(formData)
 
   const schema: ZodType<IAddReminderFormData> = z
   .object({
-    reminder: z.string().min(2, { message: "Must be 2 or more characters long" }),
+    reminder: z.string().nonempty("Please enter a reminder").min(2, { message: "Must be 2 or more characters long" }),
     dueDate: z
     .date()
     .refine((value) => value >= new Date(), {
@@ -86,20 +88,27 @@ console.log(formData)
 			[e.target.name]: e.target.value,
 		}));
 	};
+
+
+ 
   
 
   const submitData = (data: IAddReminderFormData) => {
-    console.log("submitted")
+    // console.log("submitted")
 
-    console.log("add reminder" , data)
+    // console.log("add reminder" , data)
     let ReminderData:IaddReminder = {...data, isCompleted:false}
 		addReminder({data:ReminderData, token});
 
 		if (isError) {
       // console.log(error)
-			errorToast(error.response.data.message as string);
+			errorToast(APIError.response.data.message as string);
 		}
+
+   
 	};
+
+  
 
 
   return (
@@ -115,6 +124,10 @@ console.log(formData)
           {...register("reminder")}
           value={formData.reminder}
           onChange={(e) => onChange(e)}        />
+          {errors.reminder &&
+   (
+							<span className="errorMessage">{errors.reminder.message}</span>
+						)}
       </div>
       <div className="form-group">
         <label htmlFor="dueDate">Due Date</label>
@@ -124,6 +137,10 @@ console.log(formData)
         // value={formData.dueDate}
         {...register("dueDate", {valueAsDate:true})}
         onChange={(e) => onChange(e)}        />
+        {errors.dueDate &&
+   (
+							<span className="errorMessage">{errors.dueDate.message}</span>
+						)}
       </div>
       <div className='form-group'>
         <button className='btn btn-block' type='submit'>

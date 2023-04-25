@@ -24,7 +24,6 @@ const RemindersList = (props: Props) => {
 
       let reminderElements;
 
-      console.log(reminders)
 
       if(reminders){
 

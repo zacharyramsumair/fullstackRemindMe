@@ -6,18 +6,18 @@ import { Provider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 // console.log(import.meta.env.VITE_SOME_KEY) // 123
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
     <QueryClientProvider client={queryClient}>
     <App />
     </QueryClientProvider>
-    </Provider>
+    </Provider>,
 
-  </React.StrictMode>,
+  {/* </React.StrictMode>, */}
 )

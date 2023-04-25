@@ -1,5 +1,5 @@
 import RemindersList from "../components/RemindersList";
-import CreateReminderForm from "../components/createReminderForm";
+import CreateReminderForm from "../components/CreateReminderForm";
 
 type Props = {};
 
@@ -11,7 +11,7 @@ const Dashboard = (props: Props) => {
 		</section>
 
     <hr />
-    
+
 	<section className="content">
 
       <RemindersList/>
