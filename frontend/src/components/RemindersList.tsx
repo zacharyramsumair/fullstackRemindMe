@@ -2,6 +2,7 @@ import React from 'react'
 import { useGetAllReminders } from '../hooks/useGetAllReminders'
 import Spinner from './Spinner'
 import ReminderItem from './ReminderItem'
+import SelectSortOptionForm from './SortRemindersForm'
 
 type Props = {}
 
@@ -37,6 +38,8 @@ const RemindersList = (props: Props) => {
   return (
     <>
     <p>Double Click to change the completion status</p>
+    <SelectSortOptionForm />
+    
     {reminderElements}
     </>
   )
