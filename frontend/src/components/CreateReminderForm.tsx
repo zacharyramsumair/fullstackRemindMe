@@ -16,13 +16,13 @@ type Props = {}
 
 interface IaddReminder {
   reminder: string;
-  dueDate: Date;
+  dueDate: Date|number;
   isCompleted: boolean;
 }
 
 export type IAddReminderFormData = {
   reminder: string;
-  dueDate:  Date;
+  dueDate:  Date|number;
 };
 
 
@@ -51,7 +51,7 @@ let blankAddReminderForm:IAddReminderFormData = {
 
   let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
 
-// console.log(formData)
+console.log(formData)
 
   useEffect(() => {
 		if (isSuccess) {
@@ -63,14 +63,19 @@ let blankAddReminderForm:IAddReminderFormData = {
 		}
 	}, [isSuccess]);
 
+  let date = new Date()
+
+  const previousDay = new Date(date.getTime());
+  previousDay.setDate(date.getDate() - 1);
 
   const schema: ZodType<IAddReminderFormData> = z
   .object({
     reminder: z.string().nonempty("Please enter a reminder").min(2, { message: "Must be 2 or more characters long" }),
     dueDate: z
     .date()
-    .refine((value) => value >= new Date(), {
-      message: "Due date must be in the future",
+    .refine((value) => value > previousDay, {
+    // .refine((value) => value >= new Date(), {
+      message: "Due date must be today or in the future",
     }),
   })
 
@@ -95,8 +100,11 @@ let blankAddReminderForm:IAddReminderFormData = {
 
   const submitData = (data: IAddReminderFormData) => {
     // console.log("submitted")
+    let actualDueDate = data.dueDate.setUTCDate(data.dueDate.getUTCDate() + 1);
+    data.dueDate = actualDueDate
 
-    // console.log("add reminder" , data)
+
+    console.log("add reminder" , data)
     let ReminderData:IaddReminder = {...data, isCompleted:false}
 		addReminder({data:ReminderData, token});
 

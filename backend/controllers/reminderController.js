@@ -14,6 +14,9 @@ const getReminders = async (req, res) => {
     if(sort == "oldest"){
        sortQuery ={ createdAt: 'asc' }
     }
+	if(sort == "dueDate"){
+		sortQuery ={ dueDate: 'asc' }
+	 }
 
     if(completionState == "complete"){
         completionFilter = { user: req.user.id , isCompleted:true}

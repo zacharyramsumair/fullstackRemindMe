@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGetAllReminders } from '../hooks/useGetAllReminders'
 import Spinner from './Spinner'
 import ReminderItem from './ReminderItem'
@@ -15,8 +15,12 @@ interface IReminderItem{
 }
 const RemindersList = (props: Props) => {
 
-    let {isLoading, error, data:reminders, refetch} = useGetAllReminders()
+    let [sortOption, setSortOption] = useState<string>("lastUpdated")
+    let {isLoading, error, data:reminders, refetch} = useGetAllReminders(sortOption)
 
+useEffect(()=>{
+refetch()
+},[sortOption])
 
     if (isLoading) {
         return <Spinner />
@@ -37,8 +41,10 @@ const RemindersList = (props: Props) => {
 
   return (
     <>
+    {sortOption}
     <p>Double Click to change the completion status</p>
-    <SelectSortOptionForm />
+    <SelectSortOptionForm setSortOption={setSortOption}/>
+    
     
     {reminderElements}
     </>

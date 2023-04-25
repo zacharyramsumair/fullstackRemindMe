@@ -7,7 +7,7 @@ import { queryClient } from '../main';
 
 interface IaddReminder {
     reminder: string;
-    dueDate: Date;
+    dueDate: Date|number;
     isCompleted: boolean;
 }
 const postRequest = async (data: {

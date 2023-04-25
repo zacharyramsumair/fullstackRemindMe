@@ -12,12 +12,12 @@ export const queryClient = new QueryClient();
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Provider store={store}>
     <QueryClientProvider client={queryClient}>
     <App />
     </QueryClientProvider>
-    </Provider>,
+    </Provider>
 
-  {/* </React.StrictMode>, */}
+  </React.StrictMode>,
 )

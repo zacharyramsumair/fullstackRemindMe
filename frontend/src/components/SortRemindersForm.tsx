@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const schema = z.object({
-  sortOption: z.enum(['oldest', 'lastUpdated', 'complete', 'incomplete']),
+  sortOption: z.enum(['oldest', 'lastUpdated', 'complete', 'incomplete', "dueDate"]),
 });
 
-const SelectSortOptionForm = () => {
-  const [formData, setFormData] = useState({ sortOption: '' });
+const SelectSortOptionForm = (props) => {
+  const [formData, setFormData] = useState({ sortOption: 'lastUpdated' });
   const {
     register,
     handleSubmit,
@@ -16,6 +16,11 @@ const SelectSortOptionForm = () => {
   } = useForm({
     resolver: zodResolver(schema),
   });
+
+
+  useEffect(()=>{
+    props.setSortOption(formData.sortOption)
+  }, [formData])
 
   const onChange = (e) => {
     setFormData({ sortOption: e.target.value });
@@ -35,6 +40,7 @@ const SelectSortOptionForm = () => {
           <option value="oldest">Oldest</option>
           <option value="complete">Complete</option>
           <option value="incomplete">Incomplete</option>
+          <option value="dueDate">Due Date</option>
         </select>
         {errors.sortOption && <span>{errors.sortOption.message}</span>}
       </div>
