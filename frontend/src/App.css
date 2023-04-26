@@ -20,6 +20,8 @@ p {
 	line-height: 1.7;
 }
 
+
+
 ul {
 	list-style: none;
 }
@@ -41,6 +43,7 @@ h3 {
 	margin: 0 auto;
 	padding: 0 20px;
 	text-align: center;
+	padding-bottom: 2em;
 }
 
 .header {
@@ -86,6 +89,9 @@ h3 {
 	color: #828282;
 }
 
+
+
+
 .reminders {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -109,6 +115,10 @@ h3 {
 	font-size: 1.3rem;
 }
 
+.reminder .edit:hover{
+	color: #f844f8;
+}
+
 .reminder .delete {
 	position: absolute;
 	bottom: 10px;
@@ -119,10 +129,19 @@ h3 {
 	font-size: 1.3rem;
 }
 
+.reminder .delete:hover{
+	color: #ff0000;
+}
+
 .form,
 .content {
 	width: 70%;
 	margin: 0 auto;
+}
+
+.sortForm {
+	/* border: 1px solid black; */
+	padding: 0.5em;
 }
 
 .form-group {
@@ -179,6 +198,14 @@ input[type="checkbox"] {
 	justify-content: center;
 }
 
+.instructions{
+	margin: 1em;
+}
+
+.sortLabel{
+	margin-right: 0.5em;
+}
+
 .btn svg {
 	margin-right: 8px;
 }
@@ -224,6 +251,10 @@ input[type="checkbox"] {
 	font-size: 0.8rem;
 }
 
+.noReminders{
+	margin: 1em 0;
+}
+
 @keyframes spin {
 	0% {
 		transform: rotate(0deg);
@@ -234,6 +265,20 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 600px) {
+
+	h2{
+		font-size: 1rem
+	}
+
+	p{
+		font-size: 0.8rem;
+	}
+
+
+	.reminderText{
+		margin: 0 2em;
+	}
+
 	.form {
 		width: 90%;
 	}
@@ -244,5 +289,10 @@ input[type="checkbox"] {
 
 	.heading p {
 		font-size: 1.3rem;
+	}
+
+	.reminder .edit , .reminder .delete {
+		
+		font-size: 1rem;
 	}
 }

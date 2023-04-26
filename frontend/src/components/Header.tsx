@@ -12,13 +12,10 @@ function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state: RootState) => state.auth.user)
+
   let [sortOption, setSortOption] = useState<string>("lastUpdated")
 
-  useEffect(()=>{
-    if(!user || user == null){
-      navigate("/login")
-    }
-  }, [user])
+  
 
 
 

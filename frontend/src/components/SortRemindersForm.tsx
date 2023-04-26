@@ -32,9 +32,9 @@ const SelectSortOptionForm = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitData)}>
+    <form onSubmit={handleSubmit(submitData)} className='sortForm'>
       <div>
-        <label htmlFor="sortOption">Sort by:</label>
+        <label htmlFor="sortOption" className='sortLabel'>Sort by:</label>
         <select id="sortOption" {...register('sortOption')} onChange={onChange}>
           <option value="lastUpdated">Last Updated</option>
           <option value="oldest">Oldest</option>

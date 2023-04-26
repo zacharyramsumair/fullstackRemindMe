@@ -42,76 +42,52 @@ const EditReminderForm = (props: Props) => {
   let {ErrorOneReminder, OneReminderData, LoadingOneReminder } = useGetOneReminder(id)
 
 
-  // let blankAddReminderForm:IAddReminderFormData = {
-  //   reminder:OneReminderData?.data.text,
-  //   dueDate: OneReminderData?.data.dueDate,
-  //   isCompleted: OneReminderData?.data.isCompleted,
-  // }
 
 
-  let blankAddReminderForm:IAddReminderFormData = {
-    reminder:"",
+  let blankAddReminderForm: IAddReminderFormData = {
+    reminder: "reminder",
     dueDate: new Date(),
     isCompleted: false,
-  }
+  };
+  
 
 
-  if(OneReminderData){
-    blankAddReminderForm = {
-        reminder:OneReminderData?.data.text,
-        dueDate: OneReminderData?.data.dueDate,
-        isCompleted: OneReminderData?.data.isCompleted,
-      }
-  }
+ 
 
 
 
   let [formData,setFormData] =useState<IAddReminderFormData>(blankAddReminderForm)
 
-  useEffect(()=>{
-    // blankAddReminderForm = {
-    //   reminder:OneReminderData?.data.text,
-    //   dueDate: OneReminderData.data.dueDate.setUTCDate(OneReminderData.data.dueDate.getUTCDate() + 1)
-    //   isCompleted: OneReminderData?.data.isCompleted,
-    // }
-    
-    const dateStr = OneReminderData?.data.dueDate
+
+
+  useEffect(() => {
+    const dateStr = OneReminderData?.data.dueDate;
+    console.log(dateStr)
     const date = new Date(dateStr);
-
+  
     if (isNaN(date)) {
-      console.error('Invalid date:', dateStr);
+      console.error('Invalid date:', dateStr, date);
+      setFormData((prevState) => ({
+        ...prevState,
+        dueDate: new Date(),
+        // dueDate: new Date(),
+      }));
     } else {
-      date.setDate(date.getDate()-1);
+      date.setDate(date.getDate());
       const nextDateStr = date.toISOString();
-      // console.log(nextDateStr);
-  
-    setFormData({
-      reminder:OneReminderData?.data.text,
-      // dueDate: "2023-04-28",
-      dueDate: nextDateStr.slice(0, 10),
-      isCompleted: OneReminderData?.data.isCompleted,
-    })
-  }
-
-  }, [OneReminderData])
+      setFormData({
+        reminder:OneReminderData?.data.text,
+        dueDate: new Date(nextDateStr.slice(0, 10)),
+        isCompleted: OneReminderData?.data.isCompleted,
+      });
+    }
+  }, [OneReminderData]);
   
 
 
 
-  // console.log(OneReminderData?.data.text)
-  // console.log("form",formData)
 
-  // let {
-	// 	loginAccount,
-	// 	error,
-	// 	data: loggedInUser,
-	// 	isError,
-	// 	isLoading,
-	// 	isSuccess,
-	// } = useLoginUser();
-
-  let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
-  let {updateReminder, isSuccess:SuccessfulUpdate}= useUpdateReminder()
+  let {updateReminder, isSuccess:SuccessfulUpdate, isError, error}= useUpdateReminder()
 
  
 
@@ -123,7 +99,7 @@ console.log(formData)
 		if (SuccessfulUpdate) {
 			successToast(`Reminder Updated!`);
       // setFormData(blankAddReminderForm)
-			// navigate("/");
+			navigate("/");
 		}
 	}, [SuccessfulUpdate]);
 
@@ -152,12 +128,21 @@ console.log(formData)
 		resolver: zodResolver(schema),
 	});
 
+  // const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[e.target.name]: e.target.value,
+	// 	}));
+	// };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prevState) => ({
-			...prevState,
-			[e.target.name]: e.target.value,
-		}));
-	};
+    const { name, value, checked, type } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: newValue,
+    }));
+  };
 
 
  
@@ -178,7 +163,7 @@ console.log(formData)
 			errorToast(APIError.response.data.message as string);
 		}
 
-   
+ 
 	};
 
   
@@ -207,7 +192,7 @@ console.log(formData)
         <input 
         type="date" 
         id="dueDate" 
-        value={formData.dueDate}
+        value={formData.dueDate?.toLocaleDateString("en-CA")}
         {...register("dueDate", {valueAsDate:true})}
         onChange={(e) => onChange(e)}        />
         {errors.dueDate &&

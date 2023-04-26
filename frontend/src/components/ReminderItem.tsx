@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useDeleteReminder } from "../hooks/useDeleteReminder";
@@ -54,7 +54,7 @@ const ReminderItem = (props: IReminderItem) => {
 
 	return (
 		<div className="reminder" onDoubleClick={handleDoubleClick} style={{ opacity: props.isCompleted ? 0.7 : 1 }} >
-			<h2 style={{ textDecoration: props.isCompleted ? "line-through" : "none" }}>{props.text}</h2>
+			<h2 className="reminderText" style={{ textDecoration: props.isCompleted ? "line-through" : "none" }}>{props.text}</h2>
 			<p>Due Date: {formattedDateString}</p>
 			<button className="edit" onClick={() => navigate(`reminders/${props.id}`)}>
 				<FaEdit />

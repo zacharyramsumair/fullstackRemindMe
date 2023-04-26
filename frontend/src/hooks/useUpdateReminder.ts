@@ -28,7 +28,7 @@ const putRequest = async (data:IUpdateReminder) => {
     console.log("Hrere is the remidner info" ,data)
     // const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
     const headers = { Authorization: `Bearer ${data.token}` };
-    const response = await axios.put(`${import.meta.env.VITE_BASEURL}/reminders/${data.id}`, body, { headers });
+    const response = await axios.put(`/api/reminders/${data.id}`, body, { headers });
     // const response = await axios.post(import { useDispatch } from 'react-redux';
     //  'https://api.example.com/endpoint', data, { headers });
     return response.data;

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 const postRequest = async (data) => {
     // const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
     // const headers = { Authorization: token };
-    const response = await axios.post(`${import.meta.env.VITE_BASEURL}/users/login`, data,);
+    const response = await axios.post(`/api/users/login`, data,);
     // const response = await axios.post(import { useDispatch } from 'react-redux';
     //  'https://api.example.com/endpoint', data, { headers });
     return response.data;

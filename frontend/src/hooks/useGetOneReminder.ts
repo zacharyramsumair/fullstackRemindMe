@@ -19,7 +19,7 @@ export const useGetOneReminder = (id: string) => {
 
 
 	// 'oldest', 'lastUpdated', 'complete', 'incomplete'])
-	let apiString = `${import.meta.env.VITE_BASEURL}/reminders/${id}`;
+	let apiString = `/api/reminders/${id}`;
 	
 	const token = useSelector((state: RootState) => state.auth.user.token);
 
@@ -48,7 +48,7 @@ export const useGetOneReminder = (id: string) => {
 //     const { isLoading, error, data, refetch } = useQuery(
 //         ["allReminders"],
 //         async () => {
-//             const response = await axios.get(`${import.meta.env.VITE_BASEURL}/reminders`, {
+//             const response = await axios.get(`/api/reminders`, {
 //                 headers
 //             });
 
@@ -68,7 +68,7 @@ export const useGetOneReminder = (id: string) => {
 // };
 
 // const postRequest = async (data) => {
-//     const response = await axios.post(`${import.meta.env.VITE_BASEURL}/users/login`, data);
+//     const response = await axios.post(`/api/users/login`, data);
 //     return response.data;import { useNavigate } from 'react-router-dom';
 
 // };

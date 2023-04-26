@@ -3,6 +3,7 @@ import { useGetAllReminders } from '../hooks/useGetAllReminders'
 import Spinner from './Spinner'
 import ReminderItem from './ReminderItem'
 import SelectSortOptionForm from './SortRemindersForm'
+import { useNavigate } from 'react-router-dom';
 
 type Props = {}
 
@@ -17,6 +18,11 @@ const RemindersList = (props: Props) => {
 
     let [sortOption, setSortOption] = useState<string>("lastUpdated")
     let {isLoading, error, data:reminders, refetch} = useGetAllReminders(sortOption)
+
+    let navigate = useNavigate()
+    if(!localStorage.getItem("user")){
+      navigate("/login")
+      }
 
 useEffect(()=>{
 refetch()
@@ -40,14 +46,13 @@ refetch()
       
 
   return (
-    <>
-    {sortOption}
-    <p>Double Click to change the completion status</p>
+    <section className='remindersList'>
+    <p className='instructions'><b>Double Click</b> to change the completion status</p>
     <SelectSortOptionForm setSortOption={setSortOption}/>
     
     
-    {reminderElements}
-    </>
+    {reminderElements.length > 0 ? reminderElements : <h3 className='noReminders'>You have no reminders</h3>}
+    </section>
   )
 }
 

@@ -32,9 +32,14 @@ const CreateReminderForm = (props: Props) => {
 
   const navigate = useNavigate();
 
+  if(!localStorage.getItem("user")){
+		navigate("/login")
+	  }
+
+
   let {addReminder, error:APIError, data:newReminder, isError, isLoading, isSuccess} = useAddReminder()
   const user = useSelector((state: RootState) => state.auth.user)
-
+  const token = user?.token
 
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const CreateReminderForm = (props: Props) => {
 			successToast(`Reminder Added!`);
 			//put in the return data from the post
 			// dispatch(loginUser({...newReminder,}));
-      setFormData(blankAddReminderForm)
+      setFormData({...blankAddReminderForm })
 			navigate("/");
 
 
@@ -59,8 +64,7 @@ let blankAddReminderForm:IAddReminderFormData = {
 }
 
   let [formData,setFormData] =useState<IAddReminderFormData>(blankAddReminderForm)
-  const token = useSelector((state: RootState) => state.auth.user.token)
-
+ 
 
   // let {
 	// 	loginAccount,
@@ -120,7 +124,7 @@ let blankAddReminderForm:IAddReminderFormData = {
 
 		if (isError) {
       // console.log(error)
-			errorToast(APIError.response.data.message as string);
+			errorToast(APIError?.response?.data.message as string);
 		}
 
    
@@ -139,6 +143,7 @@ let blankAddReminderForm:IAddReminderFormData = {
         <input
           type='text'
           id='reminder'
+          placeholder='Your reminder goes here'
           {...register("reminder")}
           value={formData.reminder}
           onChange={(e) => onChange(e)}        />
