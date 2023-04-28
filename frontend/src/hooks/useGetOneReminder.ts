@@ -25,7 +25,7 @@ export const useGetOneReminder = (id: string) => {
 
 	const headers = { Authorization: `Bearer ${token}` };
 	const { isLoading:LoadingOneReminder, error:ErrorOneReminder, data:OneReminderData, refetch } = useQuery(
-		["allReminders"],
+		["oneReminder"],
 		() => axios(apiString, { headers }),
 		{
 			refetchOnWindowFocus: true,
