@@ -1,14 +1,13 @@
-import react from '@vitejs/plugin-react';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import {defineConfig} from "vite"
+import react from "@vitejs/plugin-react"
 
-export default {
-  plugins: [react()],
-  server: {
-    middleware: {
-      '/api': createProxyMiddleware({
-        target: 'http://localhost:5000/api',
-        changeOrigin: true
-      })
+export default defineConfig({
+  server:{
+    proxy:{
+      '/api':'http://localhost:5000/'
     }
-  }
-};
+  },
+  plugins:[react()]
+})
+
+

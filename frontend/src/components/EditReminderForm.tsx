@@ -62,7 +62,7 @@ const EditReminderForm = (props: Props) => {
 
   useEffect(() => {
     const dateStr = OneReminderData?.data.dueDate;
-    console.log(dateStr)
+    // console.log(dateStr)
     const date = new Date(dateStr);
   
     if (isNaN(date)) {
@@ -93,7 +93,7 @@ const EditReminderForm = (props: Props) => {
 
   // console.log("one remidner" , OneReminderData)
 
-console.log(formData)
+// console.log(formData)
 
   useEffect(() => {
 		if (SuccessfulUpdate) {
@@ -149,12 +149,12 @@ console.log(formData)
   
 
   const submitData = (data: IAddReminderFormData) => {
-    console.log("submitted")
+    // console.log("submitted")
     let actualDueDate = data.dueDate.setUTCDate(data.dueDate.getUTCDate() + 1);
     data.dueDate = actualDueDate
 
 
-    console.log("add reminder" , data)
+    // console.log("add reminder" , data)
     // let ReminderData:IaddReminder = {...data}
 		updateReminder({token , id, reminderInfo:{data}});
 
@@ -192,7 +192,7 @@ console.log(formData)
         <input 
         type="date" 
         id="dueDate" 
-        value={formData.dueDate?.toLocaleDateString("en-CA")}
+        value={formData.dueDate?.toLocaleString("en-CA")}
         {...register("dueDate", {valueAsDate:true})}
         onChange={(e) => onChange(e)}        />
         {errors.dueDate &&

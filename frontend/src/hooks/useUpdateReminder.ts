@@ -25,7 +25,6 @@ const putRequest = async (data:IUpdateReminder) => {
         body = {...data.reminderInfo.data, text:data.reminderInfo.data.reminder }
     }
     
-    console.log("Hrere is the remidner info" ,data)
     // const token = 'Bearer 38473289kjfsdf4r84'; // Replace this with your actual token
     const headers = { Authorization: `Bearer ${data.token}` };
     const response = await axios.put(`/api/reminders/${data.id}`, body, { headers });

@@ -51,7 +51,7 @@ refetch()
     <SelectSortOptionForm setSortOption={setSortOption}/>
     
     
-    {reminderElements.length > 0 ? reminderElements : <h3 className='noReminders'>You have no reminders</h3>}
+    {reminderElements && reminderElements.length > 0 ? reminderElements : <h3 className='noReminders'>You have no reminders</h3>}
     </section>
   )
 }
